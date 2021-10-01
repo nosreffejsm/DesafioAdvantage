@@ -35,7 +35,7 @@ public class HomePageTests extends BaseTests {
 		assertThat(nomeCategoria_HomePage.toUpperCase(), is (nomeCategoria_CategoryPage.toUpperCase()));
 	}
 	
-	@Test
+	//@Test
 	
 
 }
