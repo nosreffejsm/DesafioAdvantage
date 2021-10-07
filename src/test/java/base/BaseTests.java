@@ -25,6 +25,7 @@ public class BaseTests {
 	@BeforeEach
 	public void carregarPaginaInicial() {
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
 		driver.get("http://advantageonlineshopping.com/");
 		homePage = new HomePage(driver);
 	}
@@ -32,5 +33,16 @@ public class BaseTests {
 	@AfterAll
 	public static void finalizar() {
 		driver.quit();
+	}
+	
+	public static void voltarPaginaAnterior() {
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		driver.navigate().back();
 	}
 }

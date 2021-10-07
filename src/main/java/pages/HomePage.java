@@ -1,11 +1,15 @@
 package pages;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 
 public class HomePage {
 
@@ -33,6 +37,16 @@ public class HomePage {
 		listaCategorias = driver.findElements(categorias);
 
 	}
+	
+	public void fluentWaitVisibilityOfElementLocated(By element) {
+
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(Duration.ofSeconds(5))
+				.pollingEvery(Duration.ofSeconds(1))
+				.ignoring(NoSuchElementException.class);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+
+	}
 
 	public int obterQuantidadeProdutosNoCarrinho() {
 
@@ -43,10 +57,16 @@ public class HomePage {
 	}
 
 	public String obterNomeCategoria(int indice) {
+		
+		fluentWaitVisibilityOfElementLocated(nomeCategoria);
+
 		return driver.findElements(nomeCategoria).get(indice).getText();
 	}
 
 	public CategoryPage clicarCategoria(int indice) {
+		
+		fluentWaitVisibilityOfElementLocated(nomeCategoria);
+		
 		driver.findElements(nomeCategoria).get(indice).click();
 		return new CategoryPage(driver);
 	}

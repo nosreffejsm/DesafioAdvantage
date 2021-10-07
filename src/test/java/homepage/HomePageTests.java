@@ -7,36 +7,62 @@ import org.junit.jupiter.api.Test;
 
 import base.BaseTests;
 import pages.CategoryPage;
+import pages.ProductPage;
 
 public class HomePageTests extends BaseTests {
-	
+
 	@Test
-	public void testContarCategorias_cincoCategoriasDiferentes() {
+	public void testContarCategorias_CincoCategoriasDiferentes() {
 		carregarPaginaInicial();
 		assertThat(homePage.contarCategorias(), is(5));
 	}
-	
+
 	@Test
 	public void testValidarCarrinhoZerado_ZeroItensNoCarrinho() {
 		int produtosNoCarrinho = homePage.obterQuantidadeProdutosNoCarrinho();
 		assertThat(produtosNoCarrinho, is(0));
 	}
-	
+
 	@Test
-	public void testValidarRedirecionamentoCategoria_RedirecionamentoOK() {
-		int indice = 0;
-		
-		String nomeCategoria_HomePage = homePage.obterNomeCategoria(indice);
-		
-		CategoryPage categoryPage = homePage.clicarCategoria(indice);
-		
-		String nomeCategoria_CategoryPage = categoryPage.obterNomeCategoria();
-		
-		assertThat(nomeCategoria_HomePage.toUpperCase(), is (nomeCategoria_CategoryPage.toUpperCase()));
+	public void testValidarAcessoCincoCategorias_CincoCategoriasAcessoOk() {
+
+		int quantidadeCategoria = homePage.contarCategorias();
+		for (int i = 0; i < quantidadeCategoria; i++) {
+
+			String nomeCategoria_HomePage = homePage.obterNomeCategoria(i);
+
+			CategoryPage categoryPage = homePage.clicarCategoria(i);
+
+			String nomeCategoria_CategoryPage = categoryPage.obterNomeCategoria();
+
+			assertThat(nomeCategoria_HomePage.toUpperCase(), is(nomeCategoria_CategoryPage.toUpperCase()));
+
+			voltarPaginaAnterior();
+		}
 	}
-	
-	//@Test
-	
+
+	@Test
+	public void testValidarDetalhePrimeiroProdutoPorCategoria_DetalhePrimeiroProdutoOK() {
+
+		int quantidadeCategoria = homePage.contarCategorias();
+		for (int i = 0; i < quantidadeCategoria; i++) {
+
+			CategoryPage categoryPage = homePage.clicarCategoria(i);
+
+			String nomeProduto_CategoryPage = categoryPage.obterNomeProduto(1);
+			String precoProduto_CategoryPage = categoryPage.obterPrecoProduto(1);
+
+			ProductPage productPage = categoryPage.clicarProduto(1);
+
+			String nomeProduto_ProductPage = productPage.obterNomeProduto();
+			String precoProduto_ProductPage = productPage.obterPrecoProduto().replace(" SOLD OUT", "");
+
+			assertThat(nomeProduto_CategoryPage.toUpperCase(), is(nomeProduto_ProductPage.toUpperCase()));
+			assertThat(precoProduto_CategoryPage, is(precoProduto_ProductPage));
+
+			voltarPaginaAnterior();
+			voltarPaginaAnterior();
+		}
+	}
 
 }
-
