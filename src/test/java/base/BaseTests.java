@@ -32,6 +32,13 @@ public class BaseTests {
 	
 	@AfterAll
 	public static void finalizar() {
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		driver.quit();
 	}
 	

@@ -7,10 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import base.BaseTests;
 import pages.CategoryPage;
+import pages.HomePage;
+import pages.LoginModalPage;
 import pages.ProductPage;
+import pages.RegisterPage;
 
 public class HomePageTests extends BaseTests {
-
+	
+	String usuarioLogin = "Jefferson";
+	String senhaLogin = "Jeff123";
+	
 	@Test
 	public void testContarCategorias_CincoCategoriasDiferentes() {
 		carregarPaginaInicial();
@@ -63,6 +69,27 @@ public class HomePageTests extends BaseTests {
 			voltarPaginaAnterior();
 			voltarPaginaAnterior();
 		}
+	}
+	
+	@Test
+	public void testCadastroComSucesso_UsuarioCadastrado() {	
+		
+		LoginModalPage loginModalPage = homePage.clicarLoginUser();
+		
+		loginModalPage.checarUsuariioExiste_DeletarUsuario(usuarioLogin, senhaLogin);
+		
+		homePage.clicarLoginUser();
+		
+		RegisterPage registerPage = loginModalPage.clicarCreateNewAccount();
+
+		registerPage.preencherFormularioCadastro(usuarioLogin, senhaLogin);
+
+		homePage = registerPage.clicarRegister();
+		
+		String usuarioLogado = HomePage.obterUsuarioLogado();
+		
+		assertThat(usuarioLogin, is (usuarioLogado));
+
 	}
 
 }

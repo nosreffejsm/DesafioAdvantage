@@ -13,21 +13,24 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 public class HomePage {
 
-	private WebDriver driver;
-
-	List<WebElement> listaCategorias = new ArrayList();
-
-	private By textoProdutosNoCarrinho = By.cssSelector("span.cart.ng-binding.ng-hide");
-
-	private By categorias = By.className("categoryCell");
-
-	private By nomeCategoria = By.cssSelector(".categoryCell span");
+	private static WebDriver driver;
 
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 
 	}
+	
+	List<WebElement> listaCategorias = new ArrayList();
 
+	private By textoProdutosNoCarrinho = By.cssSelector("span.cart.ng-binding.ng-hide");
+	private By categorias = By.className("categoryCell");
+	private By nomeCategoria = By.cssSelector(".categoryCell span");
+	private By menuUser = By.id("menuUserLink");
+
+	private static By loader = By.className("loader");
+	private static By usuarioLogado = By.className("containMiniTitle");
+
+	
 	public int contarCategorias() {
 		carregarListaCategorias();
 		return listaCategorias.size();
@@ -38,7 +41,7 @@ public class HomePage {
 
 	}
 	
-	public void fluentWaitVisibilityOfElementLocated(By element) {
+	public static void fluentWaitVisibilityOfElementLocated(By element) {
 
 		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
 				.withTimeout(Duration.ofSeconds(5))
@@ -69,6 +72,40 @@ public class HomePage {
 		
 		driver.findElements(nomeCategoria).get(indice).click();
 		return new CategoryPage(driver);
+	}
+
+	public LoginModalPage clicarLoginUser() {
+		
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(Duration.ofSeconds(5))
+				.pollingEvery(Duration.ofSeconds(1))
+				.ignoring(NoSuchElementException.class);
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
+		
+		driver.findElement(menuUser).click();
+		return new LoginModalPage(driver);
+		
+	}
+
+
+	public static String obterUsuarioLogado() {
+
+		//fluentWaitVisibilityOfElementLocated(usuarioLogado);
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+				.withTimeout(Duration.ofSeconds(5))
+				.pollingEvery(Duration.ofSeconds(1))
+				.ignoring(NoSuchElementException.class);
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return driver.findElement(usuarioLogado).getText();
+		
 	}
 
 }
